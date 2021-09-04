@@ -17,6 +17,7 @@
             >
               <label :for="question.questionId">{{ question.label }}</label>
               <input
+                :class="{ filled: question.answer && question.answer.length }"
                 :id="question.questionId"
                 type="text"
                 v-model="question.answer"
@@ -57,7 +58,6 @@ export default {
       await this.axios
         .get("http://localhost:3000/api/v1/survey")
         .then(({ data }) => {
-          console.log(data[0]);
           this.surveys = data[0];
         })
         .catch((err) => {
@@ -65,7 +65,63 @@ export default {
         });
     },
     submitForm() {
-      console.log("aaaaaaa");
+      // map answers for payload
+      let mappedAnswers = this.surveys.attributes.questions.map((obj) => {
+        let answer = {
+          questionId: obj.questionId || "",
+          answer: obj.answer || "",
+        };
+        return answer;
+      });
+      // validation for answers
+      let errors = [];
+      for (let i = 0; i < mappedAnswers.length; i++) {
+        if (mappedAnswers[i].answer === "") {
+          errors.push({
+            source: {
+              pointer: `data/attributes/answers/${mappedAnswers[i].questionId}`,
+            },
+            detail: "The value is required",
+          });
+        }
+      }
+      console.log("ERRORS:", errors);
+      let payload = {
+        type: "surveyAnswers",
+        attributes: {
+          answers: mappedAnswers,
+        },
+      };
+      if (!errors.length) {
+        this.axios
+          .post(
+            `http://localhost:3000/api/v1/survey/${this.surveys.id}/answers`,
+            payload
+          )
+          .then((res) => {
+            this.$store.commit("SET_SUBMITED_SURVEY", res.data);
+            console.log(this.$store.state.submittedSurvey);
+          })
+          .catch((err) => {
+            this.$toasted.show(err.response.statusText, {
+              duration: 2000,
+              type: "error",
+            });
+          });
+      } else {
+        for (let i = 0; i < mappedAnswers.length; i++) {
+          if (errors[i]) {
+            let errorField = errors[i].source.pointer.split("/");
+            this.$toasted.show(
+              `The ${errorField[errorField.length - 1]} field is required`,
+              {
+                duration: 2000,
+                type: "error",
+              }
+            );
+          }
+        }
+      }
     },
     isNumber(evt, type) {
       if (type === "review") {
@@ -170,6 +226,9 @@ export default {
               }
               &::placeholder {
                 color: #edede3;
+              }
+              &.filled {
+                border: 1px solid #fb5d56;
               }
             }
           }
