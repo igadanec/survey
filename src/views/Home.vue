@@ -99,7 +99,7 @@ export default {
           )
           .then((res) => {
             this.$store.commit("SET_SUBMITTED_SURVEY", res.data);
-            console.log(this.$store.state.submittedSurvey);
+            this.$router.push("/success");
           })
           .catch((err) => {
             this.$toasted.show(err.response.statusText, {
