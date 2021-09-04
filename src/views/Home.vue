@@ -85,7 +85,6 @@ export default {
           });
         }
       }
-      console.log("ERRORS:", errors);
       let payload = {
         type: "surveyAnswers",
         attributes: {
@@ -99,7 +98,7 @@ export default {
             payload
           )
           .then((res) => {
-            this.$store.commit("SET_SUBMITED_SURVEY", res.data);
+            this.$store.commit("SET_SUBMITTED_SURVEY", res.data);
             console.log(this.$store.state.submittedSurvey);
           })
           .catch((err) => {
