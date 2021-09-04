@@ -97,8 +97,11 @@ export default {
             `http://localhost:3000/api/v1/survey/${this.surveys.id}/answers`,
             payload
           )
-          .then((res) => {
-            this.$store.commit("SET_SUBMITTED_SURVEY", res.data);
+          .then(() => {
+            this.$store.commit(
+              "SET_SUBMITTED_SURVEY",
+              this.surveys.attributes.questions
+            );
             this.$router.push("/success");
           })
           .catch((err) => {
