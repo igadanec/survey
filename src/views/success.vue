@@ -7,7 +7,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeCreate() {
+    // Check store if survey is subbmitted
+    if (!this.$store.state.submittedSurvey) {
+      this.$router.go(-1);
+    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
