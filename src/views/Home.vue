@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="container__inner" v-if="surveys && surveys.attributes">
+    <div class="container__inner">
       <div class="container__inner--left">
         <img src="@/static/images/cover.jpg" alt="cover" />
         <div class="image-overflow" />
       </div>
       <div class="container__inner--right">
-        <div class="form">
+        <div v-if="surveys && surveys.attributes" class="form">
           <h1>{{ surveys.attributes.title }}</h1>
           <div class="desc" v-html="surveys.attributes.description" />
           <form class="form-survey">
@@ -36,6 +36,9 @@
               <span>Submit</span>
             </button>
           </div>
+        </div>
+        <div v-else>
+          <h1>Currently there are no questions</h1>
         </div>
       </div>
     </div>
@@ -117,7 +120,7 @@ export default {
             this.$toasted.show(
               `The ${errorField[errorField.length - 1]} field is required`,
               {
-                duration: 2000,
+                duration: 100000,
                 type: "error",
               }
             );

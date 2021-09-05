@@ -8,7 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@cypress/vue": "^2.2.3",
+    "@cypress/webpack-dev-server": "^1.5.0",
     "axios": "^0.21.1",
+    "cypress": "^8.3.1",
     "json-server": "^0.16.3",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
