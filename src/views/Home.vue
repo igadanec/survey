@@ -120,7 +120,7 @@ export default {
             this.$toasted.show(
               `The ${errorField[errorField.length - 1]} field is required`,
               {
-                duration: 100000,
+                duration: 2000,
                 type: "error",
               }
             );
